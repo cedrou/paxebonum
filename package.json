@@ -1,0 +1,13 @@
+{
+  "name": "paxebonum",
+  "version": "0.0.1",
+  "description": "Pax Et Bonum - Répertoire de chants liturgiques",
+  "author": "cedrou",
+  "private": true,
+  "scripts": {
+    "start": "concurrently -k \"cd backend && yarn start\" \"cd frontend && yarn start\""
+  },
+  "dependencies": {
+    "concurrently": "^4.1.2"
+  }
+}
