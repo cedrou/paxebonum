@@ -17,7 +17,6 @@ var api = new parseServer({
   cloud: __dirname + '/cloud/main.js',
   appId: process.env.APP_ID,
   masterKey: process.env.MASTER_KEY,
-  push: {}, // See the Push wiki page
   serverURL: 'http://localhost:3001/parse'
 });
 

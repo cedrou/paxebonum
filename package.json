@@ -1,7 +1,7 @@
 {
   "name": "paxebonum",
   "version": "0.0.1",
-  "description": "Pax Et Bonum - Répertoire de chants liturgiques",
+  "description": "Pax Bonum - Répertoire de chants liturgiques",
   "author": "cedrou",
   "private": true,
   "scripts": {
