@@ -37,23 +37,28 @@ class App extends Component {
       <div className="App">
         <BrowserRouter>
           <div>
-            <nav>
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/users/">Users</Link>
-                </li>
-                <li>
-                  <Link to="/new/">Nouveau chant</Link>
-                </li>
-              </ul>
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+              <span className="navbar-brand">
+                <img src="/taut.png" width="30" height="30" alt=""/>
+              </span>
+              <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+
+              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className="navbar-nav mr-auto">
+                  <Link to="/"  className="nav-item nav-link active">Home</Link>
+                  <Link to="/users/"  className="nav-item nav-link">Repertoire</Link>
+                  <Link to="/new/" className="nav-item nav-link">Nouveau chant</Link>
+                </div>
+              </div>
             </nav>
 
-            <Route path="/" exact component={Index} />
-            <Route path="/users/" component={Users} />
-            <Route path="/new/"   component={NewSongForm} />
+            <div className="container">
+              <Route path="/" exact component={Index} />
+              <Route path="/users/" component={Users} />
+              <Route path="/new/"   component={NewSongForm} />
+            </div>
           </div>
         </BrowserRouter>
       </div>
