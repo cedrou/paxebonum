@@ -100,37 +100,48 @@ class EditSong extends Component {
 
         {status}
         
-        <form action="" onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="title">Titre</label>
-            <input className="form-control" name="title" ref="title" required type="text" value={this.state.song.title} onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="author">Auteur</label>
-            <input className="form-control" name="author" ref="author" type="text" value={this.state.song.author} onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="code">Cote</label>
-            <input className="form-control" name="code" ref="code" type="text" value={this.state.song.code} onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="comment">Commentaire</label>
-            <input className="form-control" name="comment" ref="comment" type="text" value={this.state.song.comment} onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="url">YouTube</label>
-            <input className="form-control" name="url" ref="url" type="url" value={this.state.song.url} onChange={this.handleChange}/>
-          </div>
+        <div class="row">
+          <div class="col">
+            <form action="" onSubmit={this.handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="title">Titre</label>
+                <input className="form-control" name="title" ref="title" required type="text" value={this.state.song.title} onChange={this.handleChange}/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="author">Auteur</label>
+                <input className="form-control" name="author" ref="author" type="text" value={this.state.song.author} onChange={this.handleChange}/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="code">Cote</label>
+                <input className="form-control" name="code" ref="code" type="text" value={this.state.song.code} onChange={this.handleChange}/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="comment">Commentaire</label>
+                <input className="form-control" name="comment" ref="comment" type="text" value={this.state.song.comment} onChange={this.handleChange}/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="url">YouTube</label>
+                <input className="form-control" name="url" ref="url" type="url" value={this.state.song.url} onChange={this.handleChange}/>
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="lyrics">Paroles</label>
-            <textarea className="form-control" name="lyrics" ref="lyrics" rows="16" required value={this.state.song.lyrics} onChange={this.handleChange}/>
-          </div>
+              <div className="form-group">
+                <label htmlFor="lyrics">Paroles</label>
+                <textarea className="form-control" name="lyrics" ref="lyrics" rows="16" required value={this.state.song.lyrics} onChange={this.handleChange}/>
+              </div>
 
-          <div className="form-group">
-            <button className="btn btn-primary" type="submit">{this.add ? "Ajouter" : "Modifier"}</button>
+              <div className="form-group">
+                <button className="btn btn-primary" type="submit">{this.add ? "Ajouter" : "Modifier"}</button>
+              </div>
+            </form>
           </div>
-        </form>
+          <div class="col">
+            <div className="d-flex flex-column pt-3 pb-2 mb-3">
+              <h1 className="h2">{this.state.song.title}</h1>
+              <div className="small">{this.state.song.author} - {this.state.song.code}</div>
+            </div>
+            <ReactMarkdown className="leads">{this.state.song.lyrics}</ReactMarkdown>
+          </div>
+        </div>
       </main>
     );
   }
