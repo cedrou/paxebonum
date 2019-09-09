@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import ReactMarkdown from 'react-markdown'
+import * as parse from './parse'
+import { Redirect } from "react-router-dom";
 
 var songs = [
   {
@@ -33,12 +36,22 @@ var songs = [
   }
 ]
 
-class NewSongForm extends Component {
+class EditSong extends Component {
 
   state = {
     type: 'info',
     message: '',
-    song: {}
+    song: {},
+    toView: false
+  }
+
+  async componentDidMount() {
+    this.add = this.props.match.params.id === undefined;
+
+    if (this.add) return;
+
+    let song = await parse.getSong(this.props.match.params.id);
+    this.setState({ song });
   }
 
   handleChange = (event) => {
@@ -51,30 +64,27 @@ class NewSongForm extends Component {
     event.preventDefault();
     // Scroll to the top of the page to show the status message.
     document.getElementById('heading').scrollIntoView();
-    this.setState({ type: 'info', message: 'Sending...' }, this.sendFormData);
+
+    this.setState({ type: 'info', message: 'Sending...' }, async () => {
+      try {
+        if (this.add) {
+          await parse.addSong(this.state.song);
+        } else {
+          await parse.updateSong(this.state.song);
+        }
+        this.setState({ type: 'success', message: 'Chant ajouté avec succes', toView: true });
+      } catch {
+        this.setState({ type: 'danger', message: 'Désolé, il y a eu une erreur. Veuillez réessayer plus tard.' });
+      }
+    });
   }
 
-  sendFormData() {
-    // Send the form data.
-    var xmlhttp = new XMLHttpRequest();
-    var _this = this;
-    xmlhttp.onreadystatechange = function() {
-      if (xmlhttp.readyState === 4) {
-        if (xmlhttp.status === 201) {
-          _this.setState({ type: 'success', message: 'Chant ajouté avec succes' });
-        }
-        else {
-          _this.setState({ type: 'danger', message: 'Désolé, il y a eu une erreur. Veuillez réessayer plus tard.' });
-        }
-      }
-    };
-    xmlhttp.open('POST', '/parse/classes/Song', true);
-    xmlhttp.setRequestHeader('Content-type', 'application/json');
-    xmlhttp.setRequestHeader('X-Parse-Application-Id', 'paxebonum');
-    xmlhttp.send(JSON.stringify(this.state.song));
-  }
 
   render() {
+    if (this.state.toView) {
+      return <Redirect to={"/library/view/" + this.state.song.objectId} />
+    }
+    
     if (this.state.type && this.state.message) {
       var classString = 'alert alert-' + this.state.type;
       var status = <div id="status" className={classString} ref="status">
@@ -82,10 +92,12 @@ class NewSongForm extends Component {
                    </div>;
     }
     return (
-      <div>
-        <h2 id="heading">Ajouter un nouveau chant</h2>
-        <p>Entrez ici toutes les informations disponibles du chant à ajouter au repertoire.</p>
-        
+      <main>
+        <div className="pt-3 pb-2 mb-3" id="heading">
+          <h2>{this.add ? "Ajouter un nouveau chant" : "Modifier le chant"}</h2>
+          <p>Entrez ici toutes les informations disponibles du chant à ajouter au repertoire.</p>
+        </div>
+
         {status}
         
         <form action="" onSubmit={this.handleSubmit}>
@@ -98,7 +110,7 @@ class NewSongForm extends Component {
             <input className="form-control" name="author" ref="author" type="text" value={this.state.song.author} onChange={this.handleChange}/>
           </div>
           <div className="form-group">
-            <label htmlFor="code">Cote SECLI</label>
+            <label htmlFor="code">Cote</label>
             <input className="form-control" name="code" ref="code" type="text" value={this.state.song.code} onChange={this.handleChange}/>
           </div>
           <div className="form-group">
@@ -116,14 +128,14 @@ class NewSongForm extends Component {
           </div>
 
           <div className="form-group">
-            <button className="btn btn-primary" type="submit">Ajouter le chant</button>
+            <button className="btn btn-primary" type="submit">{this.add ? "Ajouter" : "Modifier"}</button>
           </div>
         </form>
-      </div>
+      </main>
     );
   }
 }
 
-export default NewSongForm;
+export default EditSong;
 
 

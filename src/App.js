@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import './App.css';
-import NewSongForm from './NewSongForm.js';
+import EditSong from './EditSong.js';
 import SongLibrary from './SongLibrary.js';
+import ViewSong from './ViewSong.js';
 
 function Index() {
   return <h2>Pax Bonum</h2>;
@@ -27,15 +28,16 @@ class App extends Component {
                 <div className="navbar-nav">
                   <Link className="nav-item nav-link" to="/" >Home</Link>
                   <Link className="nav-item nav-link" to="/library/" >Répertoire</Link>
-                  <Link className="nav-item nav-link" to="/new/" >Nouveau chant</Link>
                 </div>
               </div>
             </nav>
 
             <div className="container">
-              <Route path="/" exact   component={Index} />
-              <Route path="/library/" component={SongLibrary} />
-              <Route path="/new/"     component={NewSongForm} />
+              <Route path="/"                 exact component={Index} />
+              <Route path="/library/"         exact component={SongLibrary} />
+              <Route path="/library/view/:id"       component={ViewSong} />
+              <Route path="/library/new"            component={EditSong} />
+              <Route path="/library/edit/:id"       component={EditSong} />
             </div>
           </div>
         </BrowserRouter>

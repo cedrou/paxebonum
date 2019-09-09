@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
 class SongLibrary extends Component {
 
@@ -16,7 +17,7 @@ class SongLibrary extends Component {
         <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
           <h1 className="h2">Répertoire</h1>
           <div className="btn-toolbar">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Ajouter un chant</button>
+            <Link role="button" className="btn btn-sm btn-outline-secondary" to="/library/new">Ajouter un chant</Link>
           </div>
         </div>
 
@@ -31,7 +32,7 @@ class SongLibrary extends Component {
             { this.state.songs.map( (song, index) =>
               <tr key={song.objectId}>
                 <th scope="row">{index + 1}</th>
-                <td>{song.title}</td>
+                <td><Link to={"/library/view/" + song.objectId}>{song.title}</Link></td>
               </tr>
             )}
           </tbody>
