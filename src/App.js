@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Link } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
+import { BrowserRouter, Route } from "react-router-dom";
+import { LinkContainer } from 'react-router-bootstrap'
+
 import EditSong from './EditSong.js';
 import SongLibrary from './SongLibrary.js';
 import ViewSong from './ViewSong.js';
@@ -21,8 +23,8 @@ function App() {
 
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Link className="nav-item nav-link" to="/" >Home</Link>
-            <Link className="nav-item nav-link" to="/library/" >Répertoire</Link>
+            <LinkContainer to="/"><Nav.Link>Home</Nav.Link></LinkContainer>
+            <LinkContainer to="/library/"><Nav.Link>Répertoire</Nav.Link></LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
