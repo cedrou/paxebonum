@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { BrowserRouter, Route } from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap'
@@ -14,7 +14,7 @@ function Index() {
 function App() {
   return (
     <BrowserRouter>
-      <Navbar expand="lg" light bg="light">
+      <Navbar expand="lg" bg="light">
         <Navbar.Brand>
           <img src="/taut.png" width="30" height="30" alt=""/>
         </Navbar.Brand>
