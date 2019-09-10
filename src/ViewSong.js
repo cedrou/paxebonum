@@ -1,37 +1,42 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import { Container, Row, Col, ButtonToolbar, Button, ButtonGroup } from "react-bootstrap";
+import { LinkContainer } from 'react-router-bootstrap'
 import ReactMarkdown from 'react-markdown'
+import * as parse from './parse'
 
-class ViewSong extends Component {
+function ViewSong(props) {
 
-  state = {
-    song: {}
-  }
+  const [song, setSong] = useState({})
 
-  async componentDidMount() {
-    let res = await fetch('/parse/classes/Song/' + this.props.match.params.id, { headers: { 'X-Parse-Application-Id': 'paxebonum' } });
-    let song = await res.json();
-    this.setState({ song });
-  }
 
-  render() {
-    let song = this.state.song;
+  useEffect(() => {
+    async function fetchData() {
+      let song = await parse.getSong(props.match.params.id);
+      setSong(song);
+    }
+    fetchData()
+  }, []);
 
-    return (
-      <main>
-        <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-baseline pt-3 pb-2 mb-3">
-          <div className="d-flex flex-column">
-            <h1 className="h2">{song.title}</h1>
-            <div className="small">{song.author} - {song.code}</div>
-          </div>
-          <div className="btn-toolbar align-top">
-            <Link role="button" className="btn btn-sm btn-outline-secondary" to={"/library/edit/" + this.props.match.params.id}>Modifier</Link>
-            <Link role="button" className="btn btn-sm btn-outline-danger" to="edit">Supprimer</Link>
-          </div>
+  return (
+    <Container>
+      <Row className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-baseline pt-3 pb-2 mb-3">
+        <Col className="d-flex flex-column">
+          <h1 className="h2">{song.title}</h1>
+          <div className="small">{song.author} - {song.code}</div>
+        </Col>
+        <ButtonToolbar>
+          <ButtonGroup>
+            <LinkContainer to={"/library/edit/" + props.match.params.id}><Button size="sm" variant="outline-secondary">Modifier</Button></LinkContainer>
+            <LinkContainer to="edit"><Button size="sm" variant="outline-danger">Supprimer</Button></LinkContainer>
+          </ButtonGroup>
+        </ButtonToolbar>
+        <div className="btn-toolbar align-top">
         </div>
-        <ReactMarkdown className="leads">{song.lyrics}</ReactMarkdown>
-      </main>);
-  }
+      </Row>
+      <ReactMarkdown className="leads">{song.lyrics}</ReactMarkdown>
+    </Container>
+  );
 }
 
 export default ViewSong;

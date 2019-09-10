@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { Container, Row, ButtonToolbar, Button } from "react-bootstrap";
+import { Container, Row, ButtonToolbar, Button, Table } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap'
+import * as parse from './parse'
 
 function SongLibrary() {
 
@@ -9,12 +10,8 @@ function SongLibrary() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch(
-        '/parse/classes/Song', { 
-          headers: { 'X-Parse-Application-Id': 'paxebonum' }
-        });
-      const json = await res.json();
-      setSongs(json.results);
+      let list = await parse.getSongList();
+      setSongs(list);
     }
     fetchData();
   }, []);
@@ -28,7 +25,7 @@ function SongLibrary() {
         </ButtonToolbar>
       </Row>
 
-      <table className="table table-striped table-sm table-hover">
+      <Table striped hover size="sm">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -43,7 +40,7 @@ function SongLibrary() {
             </tr>
           )}
         </tbody>
-      </table>
+      </Table>
     </Container>
   );
 }
