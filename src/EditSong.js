@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import * as parse from './parse'
 import { Redirect } from "react-router-dom";
 
+/*
 var songs = [
   {
     title: "Alléluia, Magnificat",
@@ -35,6 +36,7 @@ var songs = [
     "comment":"D'après le Saint Curé d'Ars"
   }
 ]
+*/
 
 class EditSong extends Component {
 
