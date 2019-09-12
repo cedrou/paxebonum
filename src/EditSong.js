@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown'
 import * as parse from './parse'
 import { Redirect } from "react-router-dom";
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
 var songs = [
   {
@@ -36,115 +37,130 @@ var songs = [
   }
 ]
 
-class EditSong extends Component {
+function EditSong({match}) {
 
-  state = {
-    type: 'info',
-    message: '',
-    song: {},
-    toView: false
-  }
+  const isAddForm = match.params.id === undefined;
 
-  async componentDidMount() {
-    this.add = this.props.match.params.id === undefined;
+  const [message, setMessage] = useState('');
+  const [song, setSong] = useState({});
+  const [redirectToView, setRedirectToView] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isSending, setSending] = useState(false);
+  const [validated, setValidated] = useState(false);
 
-    if (this.add) return;
-
-    let song = await parse.getSong(this.props.match.params.id);
-    this.setState({ song });
-  }
-
-  handleChange = (event) => {
-    this.setState({
-      song: { ...this.state.song, [event.target.name]: event.target.value }
-    });
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    // Scroll to the top of the page to show the status message.
-    document.getElementById('heading').scrollIntoView();
-
-    this.setState({ type: 'info', message: 'Sending...' }, async () => {
-      try {
-        if (this.add) {
-          await parse.addSong(this.state.song);
-        } else {
-          await parse.updateSong(this.state.song);
-        }
-        this.setState({ type: 'success', message: 'Chant ajouté avec succes', toView: true });
-      } catch {
-        this.setState({ type: 'danger', message: 'Désolé, il y a eu une erreur. Veuillez réessayer plus tard.' });
-      }
-    });
-  }
-
-
-  render() {
-    if (this.state.toView) {
-      return <Redirect to={"/library/view/" + this.state.song.objectId} />
-    }
+  useEffect(() => {
+    if (isAddForm) return ;
     
-    if (this.state.type && this.state.message) {
-      var classString = 'alert alert-' + this.state.type;
-      var status = <div id="status" className={classString} ref="status">
-                     {this.state.message}
-                   </div>;
+    async function fetchData() {
+      setLoading(true);
+
+      let song = await parse.getSong(match.params.id);
+      setSong(song);
+
+      setLoading(false);
     }
-    return (
-      <main>
-        <div className="pt-3 pb-2 mb-3" id="heading">
-          <h2>{this.add ? "Ajouter un nouveau chant" : "Modifier le chant"}</h2>
-          <p>Entrez ici toutes les informations disponibles du chant à ajouter au repertoire.</p>
-        </div>
+    fetchData()
+  }, [isAddForm, match.params.id]);
 
-        {status}
-        
-        <div class="row">
-          <div class="col">
-            <form action="" onSubmit={this.handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="title">Titre</label>
-                <input className="form-control" name="title" ref="title" required type="text" value={this.state.song.title} onChange={this.handleChange}/>
-              </div>
-              <div className="form-group">
-                <label htmlFor="author">Auteur</label>
-                <input className="form-control" name="author" ref="author" type="text" value={this.state.song.author} onChange={this.handleChange}/>
-              </div>
-              <div className="form-group">
-                <label htmlFor="code">Cote</label>
-                <input className="form-control" name="code" ref="code" type="text" value={this.state.song.code} onChange={this.handleChange}/>
-              </div>
-              <div className="form-group">
-                <label htmlFor="comment">Commentaire</label>
-                <input className="form-control" name="comment" ref="comment" type="text" value={this.state.song.comment} onChange={this.handleChange}/>
-              </div>
-              <div className="form-group">
-                <label htmlFor="url">YouTube</label>
-                <input className="form-control" name="url" ref="url" type="url" value={this.state.song.url} onChange={this.handleChange}/>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="lyrics">Paroles</label>
-                <textarea className="form-control" name="lyrics" ref="lyrics" rows="16" required value={this.state.song.lyrics} onChange={this.handleChange}/>
-              </div>
-
-              <div className="form-group">
-                <button className="btn btn-primary" type="submit">{this.add ? "Ajouter" : "Modifier"}</button>
-              </div>
-            </form>
-          </div>
-          <div class="col">
-            <div className="d-flex flex-column pt-3 pb-2 mb-3">
-              <h1 className="h2">{this.state.song.title}</h1>
-              <div className="small">{this.state.song.author} - {this.state.song.code}</div>
-            </div>
-            <ReactMarkdown className="leads">{this.state.song.lyrics}</ReactMarkdown>
-          </div>
-        </div>
-      </main>
-    );
+  const handleChange = (event) => {
+    setSong( { ...song, [event.target.id]: event.target.value } );
   }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setValidated(true);
+
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) return
+
+    try {
+      setSending(true);
+
+      if (isAddForm) {
+        let newSong = await parse.addSong(song);
+        setSong( { ...song, ...newSong } )
+      } else {
+        await parse.updateSong(song);
+      }
+
+      setSending(false);
+      
+      setRedirectToView(true)
+
+    } catch {
+      setMessage('Désolé, il y a eu une erreur. Veuillez réessayer plus tard.');
+    }
+  }
+
+
+  if (redirectToView) {
+    return <Redirect to={"/library/view/" + song.objectId} />
+  }
+  
+  if (message) {
+    var status = <div id="status" className={'alert alert-danger'} ref="status">{message}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  return (
+    <Container>
+      <div className="pt-3 pb-2 mb-3">
+        <h2>{isAddForm ? "Ajouter un nouveau chant" : "Modifier le chant"}</h2>
+        <p>Renseignez ici toutes les informations disponibles du chant à ajouter au repertoire.</p>
+      </div>
+
+      {status}
+      
+      <Row>
+        <Col>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form.Group controlId="title">
+              <Form.Label>Titre</Form.Label>
+              <Form.Control required type="text" value={song.title} onChange={handleChange}/>
+              <Form.Control.Feedback type="invalid">Veuillez entrer un titre.</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="author">
+              <Form.Label>Auteur</Form.Label>
+              <Form.Control type="text" value={song.author} onChange={handleChange}/>
+            </Form.Group>
+            <Form.Group controlId="code">
+              <Form.Label>Cote</Form.Label>
+              <Form.Control type="text" value={song.code} onChange={handleChange}/>
+            </Form.Group>
+            <Form.Group controlId="comment">
+              <Form.Label>Commentaire</Form.Label>
+              <Form.Control type="text" value={song.comment} onChange={handleChange}/>
+            </Form.Group>
+            <Form.Group controlId="url">
+              <Form.Label>YouTube</Form.Label>
+              <Form.Control type="url" value={song.url} onChange={handleChange}/>
+            </Form.Group>
+
+            <Form.Group controlId="lyrics">
+              <Form.Label>Paroles</Form.Label>
+              <Form.Control rows="16" required value={song.lyrics} onChange={handleChange}/>
+              <Form.Control.Feedback type="invalid">Veuillez entrer des paroles.</Form.Control.Feedback>
+            </Form.Group>
+
+            <Button variant="primary" type="submit">
+              { isSending ? "...en cours..." : isAddForm ? "Ajouter" : "Sauver les modifications"}
+            </Button>
+          </Form>
+        </Col>
+
+        <Col>
+          <div className="pt-3 pb-2 mb-3">
+            <h1 className="h2">{song.title}</h1>
+            <div className="small">{song.author} - {song.code}</div>
+          </div>
+          <ReactMarkdown className="leads">{song.lyrics}</ReactMarkdown>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
 
 export default EditSong;

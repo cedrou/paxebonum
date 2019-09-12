@@ -1,7 +1,7 @@
 const APPID = 'paxebonum'
 
 export async function addSong(song) {
-  await fetch('/parse/classes/Song', {
+  let res = await fetch('/parse/classes/Song', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -9,6 +9,7 @@ export async function addSong(song) {
     },
     body: JSON.stringify(song)
   });
+  return await res.json();
 }
 
 export async function getSongList() {
@@ -29,6 +30,7 @@ export async function getSong(id) {
       'X-Parse-Application-Id': APPID 
     } 
   });
+  console.log(res);
   return await res.json();
 }
 
