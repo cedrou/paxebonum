@@ -30,7 +30,6 @@ export async function getSong(id) {
       'X-Parse-Application-Id': APPID
     }
   });
-  console.log(res);
   return await res.json();
 }
 
