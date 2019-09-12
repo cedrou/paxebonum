@@ -26,9 +26,9 @@ export async function getSongList() {
 export async function getSong(id) {
   let res = await fetch('/parse/classes/Song/' + id, {
     method: 'GET',
-    headers: { 
-      'X-Parse-Application-Id': APPID 
-    } 
+    headers: {
+      'X-Parse-Application-Id': APPID
+    }
   });
   console.log(res);
   return await res.json();
@@ -43,5 +43,14 @@ export async function updateSong(song) {
       'X-Parse-Application-Id': APPID
     },
     body: JSON.stringify(filteredSong)
+  });
+}
+
+export async function deleteSong(id) {
+  await fetch('/parse/classes/Song/' + id, {
+    method: 'DELETE',
+    headers: {
+      'X-Parse-Application-Id': APPID
+    }
   });
 }

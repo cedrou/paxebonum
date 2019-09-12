@@ -4,6 +4,7 @@ import * as parse from './parse'
 import { Redirect } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
+/*
 var songs = [
   {
     title: "Alléluia, Magnificat",
@@ -36,6 +37,7 @@ var songs = [
     "comment":"D'après le Saint Curé d'Ars"
   }
 ]
+*/
 
 function EditSong({match}) {
 
