@@ -6,6 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 import EditSong from './EditSong.js';
 import SongLibrary from './SongLibrary.js';
 import ViewSong from './ViewSong.js';
+import ViewSheet from './ViewSheet.js';
 
 function Index() {
   return <h2>Pax Bonum</h2>;

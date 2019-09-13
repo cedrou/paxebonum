@@ -1,18 +1,20 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var parseServer = require('parse-server').ParseServer;
-var parseDashboard = require('parse-dashboard');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const parseServer = require('parse-server').ParseServer;
+const parseDashboard = require('parse-dashboard');
+const cors = require('cors');
+const fetch = require('node-fetch')
 
 require('dotenv').config()
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
 
-var api = new parseServer({
+const api = new parseServer({
   databaseURI: 'mongodb://localhost:27017/parse',
   cloud: __dirname + '/cloud/main.js',
   appId: process.env.APP_ID,
@@ -20,7 +22,7 @@ var api = new parseServer({
   serverURL: 'http://localhost:3001/parse'
 });
 
-var dashboard = new parseDashboard({
+const dashboard = new parseDashboard({
   "apps": [
   {
     "serverURL": "http://localhost:3001/parse",
@@ -40,11 +42,24 @@ var dashboard = new parseDashboard({
 { allowInsecureHTTP: true }
 );
 
+// Setup CORS
+var corsOptions = {
+  origin: (origin, callback) => {
+    if (true) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(cors(corsOptions))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -52,8 +67,15 @@ app.set('view engine', 'jade');
 
 app.use('/',      indexRouter);
 app.use('/users', usersRouter);
+
 app.use('/parse', api);
 app.use('/db',    dashboard);
+
+app.get('/aelf/:type/:date/:zone', async (req, res) => {
+  let fetchResult = await fetch(`https://api.aelf.org/v1/${req.params.type}/${req.params.date}/${req.params.zone}`);
+  let json = await fetchResult.json();
+  res.json(json);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
