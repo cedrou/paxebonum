@@ -143,7 +143,7 @@ function EditSong({match}) {
 
             <Form.Group controlId="lyrics">
               <Form.Label>Paroles</Form.Label>
-              <Form.Control rows="16" required value={song.lyrics} onChange={handleChange}/>
+              <Form.Control as="textarea" rows="16" required value={song.lyrics} onChange={handleChange}/>
               <Form.Control.Feedback type="invalid">Veuillez entrer des paroles.</Form.Control.Feedback>
             </Form.Group>
 

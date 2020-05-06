@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, ButtonToolbar, Button, ButtonGroup, Alert, Modal } from "react-bootstrap";
-import { LinkContainer } from 'react-router-bootstrap'
-import * as parse from './parse'
+import { Alert } from "react-bootstrap";
 import ReactMarkdown from 'react-markdown';
-import * as moment from 'moment';
-import 'moment/locale/fr';
-moment.locale('fr');
+import dayjs from 'dayjs'
+import 'dayjs/locale/fr';
+import isoWeek from 'dayjs/plugin/isoWeek'
+
+dayjs.extend(isoWeek)
+dayjs.locale('fr')
+
 
 const songOpening = {
   title: "Le monde attend le passage des Saints",
@@ -140,7 +142,7 @@ function RawHtml({children, ...params}) {
 
 function ViewSheet({match}) {
 
-  const date = match.params.date || moment().isoWeekday(7).format("YYYY-MM-DD");
+  const date = match.params.date || dayjs().isoWeekday(7).format("YYYY-MM-DD");
 
   const [aelf, setAelf] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -162,7 +164,7 @@ function ViewSheet({match}) {
 
   return (
     <>
-      <div className="h4">{aelf.informations.jour_liturgique_nom} – {moment(date).format("DD MMMM YYYY")}</div>
+      <div className="h4">{aelf.informations.jour_liturgique_nom} – {dayjs(date).format("DD MMMM YYYY")}</div>
       
       <div className="text-uppercase font-weight-bolder">Liturgie de l'accueil</div>
 
