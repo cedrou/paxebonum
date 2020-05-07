@@ -1471,8 +1471,6 @@ Ils mettent leur espoir en lui.
 
 ## Ne rentrez pas chez vous
 
-##
-
 **Ne rentrez pas chez vous comme avant,  
 Ne vivez pas chez vous comme avant,  
 Changez vos cœurs, chassez vos peurs,  
@@ -4298,8 +4296,6 @@ La nuit de ta passion sera lumière de midi. (2)
 Alors de ton pain, pourra vivre une Église,  
 L'Église qui rassemble la terre de demain,  
 L'Église qui rassemble la terre de Dieu.
-
-##
 
 ## Tiens ma lampe allumée
 

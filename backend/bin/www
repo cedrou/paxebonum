@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+const fs = require('fs')
+
+if (!fs.existsSync('../songs.json')) {
+  require('../import-songs')()
+}
+
 
 /**
  * Module dependencies.

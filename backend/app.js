@@ -6,6 +6,7 @@ const parseServer = require('parse-server').ParseServer;
 const parseDashboard = require('parse-dashboard');
 const cors = require('cors');
 const fetch = require('node-fetch')
+const songs = require('../songs.json')
 
 require('dotenv').config()
 
@@ -68,6 +69,20 @@ app.set('view engine', 'jade');
 app.use('/',      indexRouter);
 app.use('/users', usersRouter);
 
+app.use('/parse/classes/Song/', (req, res) => {
+  if (req.method !== "GET") return res.status(404).json('I dont have that');
+  //if (req.path === "/") return res.json({results: songs})
+  if (req.path.startsWith('/')) {
+    let id = req.path.substr(1)
+    if (!id) return res.json({results: songs})
+    for (let song of songs) {
+      if (song.objectId == id) {
+        return res.json(song)       
+      }
+    }
+  }
+  res.status(404).json('I dont have that');
+});
 app.use('/parse', api);
 app.use('/db',    dashboard);
 
