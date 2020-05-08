@@ -61,4 +61,4 @@ typings/
 .next
 
 .backup
-songs.json
+#songs.json
