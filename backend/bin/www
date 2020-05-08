@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const fs = require('fs')
 
-if (!fs.existsSync('../songs.json')) {
-  require('../import-songs')()
+if (!fs.existsSync('./songs.json')) {
+  require('./import-songs')()
 }
 
 

@@ -2,8 +2,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const parseServer = require('parse-server').ParseServer;
-const parseDashboard = require('parse-dashboard');
+// const parseServer = require('parse-server').ParseServer;
+// const parseDashboard = require('parse-dashboard');
 const cors = require('cors');
 const fetch = require('node-fetch')
 const songs = require('../songs.json')
@@ -15,33 +15,33 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
-const api = new parseServer({
-    databaseURI: process.env.DATABASE_URI, //'mongodb://localhost:27017/parse',
-    // cloud: __dirname + '/cloud/main.js',
-    appId: process.env.APP_ID,
-    masterKey: process.env.MASTER_KEY,
-    serverURL: 'http://localhost:3001/parse'
-  });
+// const api = new parseServer({
+//     databaseURI: process.env.DATABASE_URI, //'mongodb://localhost:27017/parse',
+//     // cloud: __dirname + '/cloud/main.js',
+//     appId: process.env.APP_ID,
+//     masterKey: process.env.MASTER_KEY,
+//     serverURL: 'http://localhost:3001/parse'
+//   });
 
-const dashboard = new parseDashboard({
-    "apps": [
-    {
-        "serverURL": "http://localhost:3001/parse",
-        "appId": process.env.APP_ID,
-        "masterKey": process.env.MASTER_KEY,
-        "appName": "paxebonum"
-    }
-    ],
-    "users": [
-    {
-        "user":process.env.DASHBOARD_LOGIN_USER,
-        "pass":process.env.DASHBOARD_LOGIN_PASSWORD
-    }
-    ],
-    "useEncryptedPasswords": false,
-    }, 
-    { allowInsecureHTTP: true }
-);
+// const dashboard = new parseDashboard({
+//     "apps": [
+//     {
+//         "serverURL": "http://localhost:3001/parse",
+//         "appId": process.env.APP_ID,
+//         "masterKey": process.env.MASTER_KEY,
+//         "appName": "paxebonum"
+//     }
+//     ],
+//     "users": [
+//     {
+//         "user":process.env.DASHBOARD_LOGIN_USER,
+//         "pass":process.env.DASHBOARD_LOGIN_PASSWORD
+//     }
+//     ],
+//     "useEncryptedPasswords": false,
+//     }, 
+//     { allowInsecureHTTP: true }
+// );
   
 // Setup CORS
 var corsOptions = {
@@ -83,8 +83,8 @@ app.use('/parse/classes/Song/', (req, res) => {
   }
   res.status(404).json('I dont have that');
 });
-app.use('/parse', api);
-app.use('/db',    dashboard);
+// app.use('/parse', api);
+// app.use('/db',    dashboard);
 
 app.get('/aelf/:type/:date/:zone', async (req, res) => {
     let fetchResult = await fetch(`https://api.aelf.org/v1/${req.params.type}/${req.params.date}/${req.params.zone}`);

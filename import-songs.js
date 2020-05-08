@@ -4,8 +4,8 @@ const lineByLine = require('n-readlines');
 function importSongs() {
     console.log("Import songs from Markdown file... ")
 
-    // let md = fs.readFileSync('../data/livret-mch.md').toString();
-    const liner = new lineByLine('../data/livret-mch.md');
+    // let md = fs.readFileSync('./data/livret-mch.md').toString();
+    const liner = new lineByLine('./data/livret-mch.md');
     let row;
  
     let title
@@ -47,7 +47,7 @@ function importSongs() {
         }
     }
 
-    fs.writeFileSync('../songs.json', JSON.stringify(songs))
+    fs.writeFileSync('./songs.json', JSON.stringify(songs))
 
     console.log("Done")
 }
