@@ -1,11 +1,20 @@
 const fs = require('fs')
 const lineByLine = require('n-readlines');
 
+function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for(var i = 0; i < length; i++) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 function importSongs() {
     console.log("Import songs from Markdown file... ")
 
-    // let md = fs.readFileSync('./data/livret-mch.md').toString();
-    const liner = new lineByLine('./data/livret-mch.md');
+    const liner = new lineByLine(__dirname + '/livret-mch.md');
     let row;
  
     let title
@@ -16,14 +25,15 @@ function importSongs() {
     const addSong = (title, category, lyrics) => {
         if (title && category && lyrics) {
             songs.push({
-                objectId: songs.length + 100000,
+                objectId: makeid(8),
                 title: title,
                 author: "",
                 code: "",
                 comment: "",
                 category: category,
                 url: "",
-                lyrics: lyrics.trim()
+                lyrics: lyrics.trim(),
+                imported: "mcb"
             })
         }
     }
@@ -47,7 +57,7 @@ function importSongs() {
         }
     }
 
-    fs.writeFileSync('./songs.json', JSON.stringify(songs))
+    fs.writeFileSync(__dirname + '/songs.json', JSON.stringify(songs))
 
     console.log("Done")
 }

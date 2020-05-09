@@ -6,9 +6,9 @@ const logger = require('morgan');
 // const parseDashboard = require('parse-dashboard');
 const cors = require('cors');
 const fetch = require('node-fetch')
-const songs = require('../songs.json')
+const songs = require('./data/songs.json')
 
-require('dotenv').config()
+// require('dotenv').config()
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -67,8 +67,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use('/',      indexRouter);
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
 
+app.use(express.static('build'))
+
+// API
 app.use('/parse/classes/Song/', (req, res) => {
   if (req.method !== "GET") return res.status(404).json('I dont have that');
   //if (req.path === "/") return res.json({results: songs})
@@ -87,27 +90,27 @@ app.use('/parse/classes/Song/', (req, res) => {
 // app.use('/db',    dashboard);
 
 app.get('/aelf/:type/:date/:zone', async (req, res) => {
-    let fetchResult = await fetch(`https://api.aelf.org/v1/${req.params.type}/${req.params.date}/${req.params.zone}`);
-    let json = await fetchResult.json();
-    res.json(json);
-  });
-  
-  // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  });
-  
-  // error handler
-  app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-  
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-  });
-  
+  let fetchResult = await fetch(`https://api.aelf.org/v1/${req.params.type}/${req.params.date}/${req.params.zone}`);
+  let json = await fetchResult.json();
+  res.json(json);
+});
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
 module.exports = app;
