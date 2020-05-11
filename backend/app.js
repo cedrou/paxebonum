@@ -66,10 +66,7 @@ app.use(cors(corsOptions))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use('/',      indexRouter);
-// app.use('/users', usersRouter);
 
-app.use(express.static('build'))
 
 // API
 app.use('/parse/classes/Song/', (req, res) => {
@@ -94,6 +91,14 @@ app.get('/aelf/:type/:date/:zone', async (req, res) => {
   let json = await fetchResult.json();
   res.json(json);
 });
+
+
+// Everything else gets passed to frontend
+app.use(express.static('build'));
+app.use('*', (req,res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
