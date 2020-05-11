@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown'
-import * as parse from './parse'
+import * as api from './api'
 import { Redirect } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
@@ -56,7 +56,7 @@ function EditSong({match}) {
     async function fetchData() {
       setLoading(true);
 
-      let song = await parse.getSong(match.params.id);
+      let song = await api.getSong(match.params.id);
       setSong(song);
 
       setLoading(false);
@@ -79,10 +79,10 @@ function EditSong({match}) {
       setSending(true);
 
       if (isAddForm) {
-        let newSong = await parse.addSong(song);
+        let newSong = await api.addSong(song);
         setSong( { ...song, ...newSong } )
       } else {
-        await parse.updateSong(song);
+        await api.updateSong(song);
       }
 
       setSending(false);

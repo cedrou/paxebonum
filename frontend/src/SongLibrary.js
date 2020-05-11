@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { Container, Row, ButtonToolbar, Button, Table } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap'
-import * as parse from './parse'
+import * as api from './api'
 
 function SongLibrary() {
 
@@ -10,7 +10,7 @@ function SongLibrary() {
 
   useEffect(() => {
     async function fetchData() {
-      let list = await parse.getSongList();
+      let list = await api.getSongList();
       setSongs(list);
     }
     fetchData();

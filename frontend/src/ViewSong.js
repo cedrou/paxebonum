@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, ButtonToolbar, Button, ButtonGroup, Alert, Modal } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap'
 import ReactMarkdown from 'react-markdown'
-import * as parse from './parse'
+import * as api from './api'
 import { Redirect } from "react-router-dom";
 
 
@@ -16,13 +16,13 @@ function ViewSong({match}) {
   const [redirect, setRedirect] = useState(false);
 
   const handleDelete = async () => {
-    await parse.deleteSong(match.params.id);
+    await api.deleteSong(match.params.id);
     setRedirect(true);
   }
 
   useEffect(() => {
     async function fetchData() {
-      let song = await parse.getSong(match.params.id);
+      let song = await api.getSong(match.params.id);
       if (song.objectId === undefined) {
         setError('Impossible de trouver le chant')
       }

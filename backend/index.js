@@ -42,7 +42,8 @@ app.use(express.urlencoded({ extended: false }));
 
 
 // API
-app.use('/parse/classes/Song/', (req, res) => {
+app.use('/song/', (req, res) => {
+  console.log ("GET Song " + req.path)
   if (req.method !== "GET") return res.status(404).json('I dont have that');
   //if (req.path === "/") return res.json({results: songs})
   if (req.path.startsWith('/')) {
