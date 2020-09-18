@@ -24,6 +24,7 @@
   "scripts": {
     "start": "concurrently -k \"nodemon ../backend/index.js\" \"react-scripts start\"",
     "build": "react-scripts build && rm -rf ../backend/frontend && mv build ../backend/frontend",
+    "buildw": "react-scripts build && cmd /c rmdir /s /q ..\backend\frontend && move build ../backend/frontend",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
