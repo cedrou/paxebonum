@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, ButtonToolbar, Button, ButtonGroup, Alert, Modal } from "react-bootstrap";
-import { LinkContainer } from 'react-router-bootstrap'
+import { Container, Row, Col, Alert } from "react-bootstrap";
+// import { ButtonToolbar, Button, ButtonGroup, Modal } from "react-bootstrap";
+// import { LinkContainer } from 'react-router-bootstrap'
 import ReactMarkdown from 'react-markdown'
 import * as api from './api'
 import { Redirect } from "react-router-dom";
@@ -12,13 +13,13 @@ function ViewSong({match}) {
   const [song, setSong] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
   const [redirect, setRedirect] = useState(false);
 
-  const handleDelete = async () => {
-    await api.deleteSong(match.params.id);
-    setRedirect(true);
-  }
+  // const handleDelete = async () => {
+  //   await api.deleteSong(match.params.id);
+  //   setRedirect(true);
+  // }
 
   useEffect(() => {
     async function fetchData() {
@@ -52,7 +53,7 @@ function ViewSong({match}) {
           <h2>{song.title}</h2>
           <div className="small">{song.author} - {song.code}</div>
         </Col>
-        <ButtonToolbar>
+        {/* <ButtonToolbar>
           <ButtonGroup>
             <LinkContainer to={"/library/edit/" + match.params.id}><Button size="sm" variant="outline-secondary">Modifier</Button></LinkContainer>
             <Button size="sm" variant="outline-danger" onClick={() => setShowModal(true)}>Supprimer</Button>
@@ -75,7 +76,7 @@ function ViewSong({match}) {
             </Modal>
 
           </ButtonGroup>
-        </ButtonToolbar>
+        </ButtonToolbar> */}
         <div className="btn-toolbar align-top">
         </div>
       </Row>
